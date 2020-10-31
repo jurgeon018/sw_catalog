@@ -39,6 +39,17 @@ class ItemAttributeFilter(AutocompleteFilter):
     title = _('атрибутом товару')
     field_name = 'item_attribute'
 
+class FeatureFilter(AutocompleteFilter):
+    title = _("назвою характеристики")
+    field_name = "name"
+
+class FeatureValueFilter(AutocompleteFilter):
+    title = _("значенням характеристики")
+    field_name = "value"
+
+class FeatureCategoryFilter(AutocompleteFilter):
+    title = _("категорією")
+    field_name = "category"
 
     
 class ItemCategoryTreeRelatedFieldListFilter(TreeRelatedFieldListFilter):

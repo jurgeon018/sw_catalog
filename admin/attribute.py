@@ -15,14 +15,14 @@ from django.forms import TextInput, Textarea, NumberInput
 from django.utils.translation import gettext_lazy as _
 
 
-from sw_utils.utils import (
+from box.core.utils import (
     AdminImageWidget, show_admin_link, move_to, BaseAdmin,
     seo, base_main_info
 )
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
 
 
 import nested_admin
@@ -221,7 +221,7 @@ class AttributeAdmin(AttrBaseMixin):
         'name',
     ]
     readonly_fields = [
-        'code',
+        # 'code',
     ]
     list_filter = [
         CategoryFilter,
@@ -234,7 +234,9 @@ class AttributeValueAdmin(AttrBaseMixin):
     
     def has_delete_permission(self, request, obj=None):
         return False if obj and obj.code else True 
-
+    autocomplete_fields = [
+        'attribute',
+    ]
     resource_class = AttributeValueResource
     readonly_fields = [
         # 'code',

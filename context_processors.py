@@ -1,4 +1,4 @@
-# from sw_shop.sw_catalog.models import ItemCategory, Item
+# from box.apps.sw_shop.sw_catalog.models import ItemCategory, Item
 # from . import settings as item_settings 
 
 

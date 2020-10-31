@@ -17,7 +17,7 @@ from openpyxl import Workbook
 from datetime import datetime 
 
 
-from sw_utils.sw_imp_exp.main import ExportMixin
+from box.core.sw_imp_exp.main import ExportMixin
 from django.utils.html import strip_tags
 
 

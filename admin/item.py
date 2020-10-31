@@ -14,14 +14,14 @@ from django.conf import settings
 from django.forms import TextInput, Textarea, NumberInput
 from django.utils.translation import gettext_lazy as _
 
-from sw_utils.utils import (
+from box.core.utils import (
     AdminImageWidget, show_admin_link, move_to, BaseAdmin,
     seo, base_main_info
 )
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
 
 
 
@@ -54,8 +54,27 @@ class SimilarInline(nested_admin.NestedTabularInline):
     classes = ['collapse',]
     verbose_name = _('Схожий товар')
     verbose_name_plural = _('Схожі товари')
+    
 if 'jet' in settings.INSTALLED_APPS:
     from jet.filters import RelatedFieldAjaxListFilter
+ 
+from importlib import import_module 
+
+def gen_item_inlines():
+    inlines = [
+        SimilarInline,
+        ItemImageInline,
+        ItemFeatureInline,
+        ItemAttributeInline,
+        # ItemReviewInline, 
+    ]  
+    for item_additional_inline in item_settings.ITEM_ADDITIONAL_INLINE:
+        module, klass = item_additional_inline.rsplit('.', 1)
+        module = import_module(module)
+        inline = getattr(module, klass)
+        inlines.append(inline)
+    return inlines
+
 
 class ItemAdmin(
     BaseAdmin,
@@ -81,7 +100,7 @@ class ItemAdmin(
         ]
     else:
         list_filter = [
-            "category",
+            # "category",
             # ('category', ItemCategoryTreeRelatedFieldListFilter),
             CategoryFilter,
             MarkersFilter,
@@ -106,13 +125,8 @@ class ItemAdmin(
         "slug": ("title",),
         # "code": ("title",),
     }
-    inlines = [
-        SimilarInline,
-        ItemImageInline,
-        ItemFeatureInline,
-        ItemAttributeInline,
-        # ItemReviewInline, 
-    ]  
+
+    inlines = gen_item_inlines()
     item_fields = [
         'title',
         "brand",

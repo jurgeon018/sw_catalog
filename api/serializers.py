@@ -1,6 +1,6 @@
 from django.conf import settings 
-from sw_shop.sw_catalog.models import *
-from sw_shop.sw_catalog import settings as item_settings
+from box.apps.sw_shop.sw_catalog.models import *
+from box.apps.sw_shop.sw_catalog import settings as item_settings
 from modeltranslation.manager import get_translatable_fields_for_model
 from rest_framework import serializers
 
@@ -110,13 +110,18 @@ class ItemDetailSerializer(serializers.ModelSerializer):
       'similars',
       # 'images',
     ]
+from box.core.sw_global_config.models import GlobalMarker
+class GlobalMarkerSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = GlobalMarker
+    exclude = []
 
 
 class ItemListSerializer(serializers.ModelSerializer):
   price    = serializers.ReadOnlyField()
   currency = CurrencySerializer()
   in_stock = ItemStockSerializer()
-
+  markers  = GlobalMarkerSerializer(many=True, read_only=True)
   absolute_url = serializers.SerializerMethodField() 
   def get_absolute_url(self, obj):
       return obj.get_absolute_url()

@@ -7,7 +7,7 @@ from import_export.widgets import ForeignKeyWidget
 import json 
 
 from ..models import * 
-from sw_utils.utils import get_multilingual_fields
+from box.core.utils import get_multilingual_fields
 
 
 
@@ -57,7 +57,7 @@ class ItemCategoryResource(ModelResource):
         return order 
     
     def before_import_row(self, row, **kwargs):
-        self.handle_image_import(row)
+        # self.handle_image_import(row)
         self.handle_code_import(row)
     
     def handle_code_import(self, row):

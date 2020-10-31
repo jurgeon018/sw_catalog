@@ -14,14 +14,14 @@ from django.conf import settings
 from django.forms import TextInput, Textarea, NumberInput
 
 
-from sw_utils.utils import (
+from box.core.utils import (
     AdminImageWidget, show_admin_link, move_to, BaseAdmin,
     seo, base_main_info
 )
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
 
 
 

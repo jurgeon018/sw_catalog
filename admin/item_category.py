@@ -15,14 +15,14 @@ from django.forms import TextInput, Textarea, NumberInput
 from django.utils.translation import gettext_lazy as _
 
 
-from sw_utils.utils import (
+from box.core.utils import (
     AdminImageWidget, show_admin_link, move_to, BaseAdmin,
     seo, base_main_info, ClonableModelAdmin
 )
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
-from sw_shop.sw_catalog.models import * 
-from sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
+from box.apps.sw_shop.sw_catalog.models import * 
+from box.apps.sw_shop.sw_cart.models import * 
 
 
 

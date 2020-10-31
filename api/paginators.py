@@ -1,7 +1,7 @@
 from rest_framework.pagination import BasePagination, LimitOffsetPagination, PageNumberPagination, CursorPagination
 
 
-from sw_shop.sw_cart.utils import get_cart
+from box.apps.sw_shop.sw_cart.utils import get_cart
 
 
 def get_items_in_favours(request, items):
@@ -28,10 +28,12 @@ class StandardPageNumberPagination(PageNumberPagination):
     max_page_size          = 1000
     page_query_param       = 'page_number'
     page_size_query_param  = 'per_page'
+    
     def get_paginated_response(self, data):
         items = self.page.object_list
         response = super().get_paginated_response(data)
         response.data['total_pages'] = self.page.paginator.num_pages
+        response.data['page_number'] = self.page.number
         response.data['items_in_cart'] = get_items_in_cart(self.request, items)
         response.data['items_in_favours'] = get_items_in_favours(self.request, items)
         return response

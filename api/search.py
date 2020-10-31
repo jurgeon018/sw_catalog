@@ -1,6 +1,6 @@
 import re
 from django.db.models import Q
-from sw_shop.sw_catalog import settings as item_settings 
+from box.apps.sw_shop.sw_catalog import settings as item_settings 
 
 def filter_search(items, query):
     search_query = query.get('q')
@@ -16,7 +16,7 @@ def normalize_query(query_string):
     findterms = re.compile(r'"([^"]+)"|(\S+)').findall
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
 
-#TODO: переробити на sw_utils.sw_model_search 
+#TODO: переробити на box.core.sw_model_search 
 
 
 def get_query(query_string, search_fields):

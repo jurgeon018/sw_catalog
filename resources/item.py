@@ -7,9 +7,9 @@ from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 import json 
 
 from ..models import * 
-from sw_utils.utils import get_multilingual_fields
+from box.core.utils import get_multilingual_fields
 
-from sw_utils.sw_global_config.models import GlobalConfig, GlobalLabel, GlobalMarker
+from box.core.sw_global_config.models import GlobalConfig, GlobalLabel, GlobalMarker
 
 class ItemResource(ModelResource):
 
@@ -178,7 +178,7 @@ class ItemResource(ModelResource):
         4. Спочатку з ItemImage.csv грузяться фотки без лінок на товари. 
         Потім з Item.csv з поля images грузяться товари з ссилками на фотки 
         '''
-        # from sw_shop.sw_catalog.utils.utils import get_image_path
+        # from box.apps.sw_shop.sw_catalog.utils.utils import get_image_path
         # if row.get('images'):
         #     image_names = row['images'].split(',')
         #     print("image_names")
@@ -204,7 +204,11 @@ class ItemResource(ModelResource):
     
     def dehydrate_images(self, item):
         images = ItemImage.objects.all().filter(item=item) 
-        images_url = ','.join([image.image.url.split('/')[-1] for image in images])
+        imgs = []
+        for image in images:
+            if image.image:
+                imgs.append(image.image.url.split('/')[-1])
+        images_url = ','.join(imgs)
         return images_url
 
     def handle_server_images_import(self, row):
@@ -221,8 +225,9 @@ class ItemResource(ModelResource):
         server_images = []
         images = ItemImage.objects.all().filter(item=item)
         for image in images:
-            server_image = f'https://{domain}{image.image.url}'
-            server_images.append(server_image)
+            if image.image:
+                server_image = f'https://{domain}{image.image.url}'
+                server_images.append(server_image)
         return ','.join(server_images) 
 
     def handle_markers_import(self, row):

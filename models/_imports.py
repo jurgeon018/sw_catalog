@@ -21,8 +21,8 @@ from adminsortable.fields import SortableForeignKey
 import os 
 from PIL import Image
 
-from sw_utils.managers import *
-from sw_utils.models import AbstractPage, BaseMixin
+from box.core.managers import *
+from box.core.models import AbstractPage, BaseMixin
 from ..utils import generate_unique_slug, item_image_folder
 
 

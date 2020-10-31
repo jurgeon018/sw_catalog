@@ -9,7 +9,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from . import ItemImage, Currency, ItemStock, ItemView
 from .. import settings as item_settings
 
-from sw_utils.models import AbstractPage
+from box.core.models import AbstractPage
 from PIL import Image
 
 
@@ -19,7 +19,7 @@ import os
 from django.core.files.storage import default_storage as storage
 from io import BytesIO
 from django.core.files import File
-from sw_utils.models import OverwriteStorage
+from box.core.models import OverwriteStorage
 
 from . import (
     ItemAttribute, ItemAttributeValue, Attribute, AttributeValue, ItemFeature,
@@ -34,12 +34,122 @@ class GoogleFieldsMixin(models.Model):
         abstract = True 
 
 
-class Item(AbstractPage, GoogleFieldsMixin):
-
-    @staticmethod
-    def autocomplete_search_fields():
-        return 'markers', 'labels', 'manufacturer',
+class ItemPricesMixin(models.Model):
+    class Meta:
+        abstract = True 
+    currency = models.ForeignKey(
+        verbose_name=_("Валюта"),    to="sw_currency.Currency",
+        related_name="items", on_delete=models.SET_NULL, 
+        blank=True, null=True,
+    )
+    DISCOUNT_TYPE_CHOICES = (
+        ("p", "%"),
+        ("v", "сумма"),
+    )
+    discount_type = models.CharField(
+        verbose_name=_("Тип знижки"), default="v", max_length=255,
+        choices=DISCOUNT_TYPE_CHOICES,
+    )
+    discount = models.FloatField(
+        verbose_name=_("знижка"), default=0, max_length=255,
+        # validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
+    # TODO: rest_framework.serializers.ModelSerializer чогось не серіалізує DecimalField
+    # price        = models.DecimalField(
+    # verbose_name=_("Нова ціна"),  max_digits=10, decimal_places=2, default=0)
+    price = models.FloatField(
+        verbose_name=_("Ціна"), 
+        default=0, 
+        # blank=True, null=True,
+    )
     
+    def get_price(self, currency=None, price_type='price', request=None):
+        if not currency:
+            currency = Currency.objects.get(is_main=True)
+        price = self.price
+        if price_type == 'price_with_discount' and self.discount:
+            # ціна з знижкою
+            price -= self.get_discount_price()
+        elif price_type == 'price_with_coupons' and request:
+            # ціна з купоном
+            price -= self.get_coupons_price(self.currency, request)
+            # price -= price / self.get_coupons_discount(self.currency, request)
+            # TODO: 
+        elif price_type == 'price_with_coupons_with_discount':
+            # ціна з купоном з знижкою
+            if request and self.discount:
+                price -= self.get_discount_price()
+                price -= self.get_coupons_price(self.currency, request)
+                # price -= price / self.get_coupons_discount(self.currency, request)
+                # TODO: 
+            elif request:
+                price -= self.get_coupons_price(self.currency, request)
+                # price -= price / self.get_coupons_discount(self.currency, request)
+                # TODO: 
+            elif self.discount:
+                price -= self.get_discount_price()
+        koef = currency.convert(curr_from=self.currency, curr_to=currency)
+        price = price * koef
+        return price 
+
+    def get_discount_price(self):
+        if self.discount_type == 'p':
+            discount = self.price * self.discount / 100
+        else:
+            discount = self.discount
+        return discount  
+        # return self.price - discount   
+
+    def get_coupons_price(self, item_currency, request):
+        price = 0
+        coupons = Coupon.objects.filter(user__in=[request.user,], discount_type='currency')
+        for coupon in coupons:
+            price += coupon.discount_amount * Currency.convert(curr_from=coupon.currency, curr_to=item_currency)
+        return price 
+        
+    def get_coupons_discount(self, item_currency, request):
+        price = 0
+        coupons = Coupon.objects.filter(user__in=[request.user,], discount_type='percent')
+        for coupon in coupons:
+            price += coupon_discount.discount_amount
+        return price 
+
+    # old
+
+    def converted_price(self):
+        price = 0 
+        if self.price and self.currency:
+            price = self.price * self.currency.get_rate()
+        return price
+
+    def converted_discount_price(self):
+        price = 0 
+        if self.discount_price() and self.currency:
+            price = self.price * self.currency.get_rate()
+        return price
+
+    def final_unconverted_price(self):
+        final_unconverted_price = self.discount_price() or self.price 
+        return final_unconverted_price
+
+    def discount_price(self):
+        price = 0 
+        if self.price and self.discount:
+            discount = self.discount 
+            if self.discount_type == 'p':
+                discount = self.price * discount/ 100
+            price = self.price - discount
+        return round(price, 2)
+
+    def get_cart_price(self):
+        cart_price = self.converted_discount_price() or self.converted_price()
+        return cart_price
+    
+    def main_currency(self):
+        return Currency.objects.get(is_main=True)
+
+
+class Item(AbstractPage, GoogleFieldsMixin, ItemPricesMixin):
     # parent = models.ForeignKey(verbose_name="Батьківський товар", to="self", on_delete=models.SET_NULL, null=True, blank=True)
     if item_settings.MULTIPLE_CATEGORY:
         categories = models.ManyToManyField(
@@ -93,80 +203,14 @@ class Item(AbstractPage, GoogleFieldsMixin):
         upload_to=item_settings.ITEM_UPLOAD_TO,
         # storage=OverwriteStorage(),
     )
-    currency = models.ForeignKey(
-        verbose_name=_("Валюта"),    to="sw_currency.Currency",
-        related_name="items", on_delete=models.SET_NULL, 
-        blank=True, null=True,
-    )
-    DISCOUNT_TYPE_CHOICES = (
-        ("p", "%"),
-        ("v", "сумма"),
-    )
-    discount_type = models.CharField(
-        verbose_name=_("Тип знижки"), default="v", max_length=255,
-        choices=DISCOUNT_TYPE_CHOICES,
-    )
-    discount = models.FloatField(
-        verbose_name=_("знижка"), default=0, max_length=255,
-        # validators=[MinValueValidator(0), MaxValueValidator(100)],
-    )
-    # TODO: rest_framework.serializers.ModelSerializer чогось не серіалізує DecimalField
-    # price        = models.DecimalField(
-    # verbose_name=_("Нова ціна"),  max_digits=10, decimal_places=2, default=0)
-    price = models.FloatField(
-        verbose_name=_("Ціна"), 
-        default=0, 
-        # blank=True, null=True,
-    )
 
     def __str__(self):
         return f"{self.title}"#, {self.slug}"
     
     class Meta: 
-        verbose_name = _('товар'); 
+        verbose_name = _('товар')
         verbose_name_plural = _('товари')
         # ordering = ['order']
-
-    def get_price_by_currency(self, currency):
-        print("\n\nget_price_by_currency:", currency.get_rate())
-        price = self.price
-        return price
-    
-    def get_price(self):
-        price = 0
-        return price 
-
-    def discount_price(self):
-        price = 0 
-        if self.price and self.discount:
-            discount = self.discount 
-            if self.discount_type == 'p':
-                discount = self.price * discount/ 100
-            price = self.price - discount
-        return round(price, 2)
-
-    def get_cart_price(self):
-        cart_price = self.converted_discount_price() or self.converted_price()
-        return cart_price
-    
-    def converted_price(self):
-        price = 0 
-        if self.price and self.currency:
-            price = self.price * self.currency.get_rate()
-        return price
-
-    def converted_discount_price(self):
-        price = 0 
-        if self.discount_price() and self.currency:
-            price = self.price * self.currency.get_rate()
-        return price
-
-    def final_unconverted_price(self):
-        final_unconverted_price = self.discount_price() or self.price 
-        return final_unconverted_price
-
-    def main_currency(self):
-        return Currency.objects.get(is_main=True)
 
     def clean(self):
         from django.core.validators import ValidationError 
@@ -218,6 +262,10 @@ class Item(AbstractPage, GoogleFieldsMixin):
         elif self.amount and self.in_stock.availability == False:
             self.in_stock = ItemStock.objects.filter(availability=True).first()
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return 'markers', 'labels', 'manufacturer',
+    
     def save(self, *args, **kwargs):
         self.handle_in_stock(*args, **kwargs)
         self.handle_image(*args, **kwargs)
@@ -296,15 +344,20 @@ class Item(AbstractPage, GoogleFieldsMixin):
         #     visits = visits[:10]
         request.session['visits'] = visits
     
-    def get_visited(self, request):
-        visited = self._meta.model.objects.filter(id__in=request.session['visits'])
+    # def get_visited(self, request):
+    #     visited = self._meta.model.objects.filter(id__in=request.session['visits'])
+    #     return visited
+    
+    @classmethod
+    def get_visited(cls, request):
+        visited = cls.objects.filter(id__in=request.session.get('visits', []))
         return visited
 
     def get_visited_by(self, request):
         return 
 
     def is_in_cart(self, request):
-        from sw_shop.sw_cart.utils import get_cart
+        from box.apps.sw_shop.sw_cart.utils import get_cart
         return self.id in get_cart(request).items.all().values_list('item__id', flat=True)
 
     def get_stars_total(self):
@@ -330,45 +383,3 @@ class Item(AbstractPage, GoogleFieldsMixin):
       except:
         stars = 0
       return str(stars)
-
-
-# class ItemVariant(models.Model):
-#     pass 
-
-
-
-
-'''
-
-
-
-1 спосіб 
-
-плюси
-мінуси 
-
-
-
-Реджіна 
-id:1
-Реджіна 
-id:2
-
-ItemFeature
-item:1
-name:розмір
-value:30
-unit:cm 
-
-ItemFeature
-item:2
-name:розмір
-value:50 
-unit:cm 
-
-'''
-
-
-
-
-

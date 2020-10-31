@@ -1,5 +1,5 @@
 
-from sw_utils.sw_solo.models import SingletonModel
+from box.core.sw_solo.models import SingletonModel
 from django.db import models 
 from django.utils.translation import gettext_lazy as _ 
 

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from sw_shop.sw_catalog.models import (
+from box.apps.sw_shop.sw_catalog.models import (
   Item, ItemImage, ItemCategory, Attribute, AttributeValue, ItemAttribute, ItemAttributeValue
 )
 import random

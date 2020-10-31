@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<data>
+    <items>
+        <item name="item1">Сапа</item>
+        <item name="item2">Вело</item>
+        <item name="item3">Моцик</item>
+        <item name="item4">Трактор</item>
+    </items>
+</data>

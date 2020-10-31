@@ -1,0 +1,21 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n %}
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">{% trans 'Home' %}</a>
+        &rsaquo;
+        <a href="/admin/item">Магазин</a>
+        &rsaquo;
+        <a href="/admin/item/item">Товари</a>
+        &rsaquo; 
+        Загрузити декілька товарів
+    </div>
+{% endblock %}
+{% block content%}
+<form action="{% url 'feed_items' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file"> 
+    <input type="submit" value="Загрузити"/>
+</form>
+
+{% endblock content%}

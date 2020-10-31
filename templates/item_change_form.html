@@ -1,0 +1,56 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+
+{% block object-tools-items %}
+
+  <li>
+      <a href="{% url 'export_item_photoes' original.slug %}" class="historylink">{% trans "Вигрузити фото архівом" %}</a>
+  </li>      
+  <li>
+      {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+      <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
+  </li>
+
+  {% if has_absolute_url %}
+  <li>
+    <a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a>
+  </li>
+  {% if include_clone_link %}
+  <li><a href="clone/">{{ clone_verbose_name }}</a></li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+
+
+{% block object-tools %}
+
+{{block.super}}
+  {% if original.slug %}
+  <form method="POST" action="{% url 'import_item_photoes' original.slug %}"  enctype="multipart/form-data">
+    {% csrf_token %}
+    <input class="historylink" type="submit" value="{% trans "Загрузити кілька фото" %}">
+    <input type="file" id="files" name="files" multiple>
+  </form>
+  <hr><br>
+  {% endif %}
+  <!-- {% if original.slug %}
+  <form method="POST" action="{% url 'delete_item_photoes' original.slug  %}">
+    {% csrf_token %}
+    <input type="submit"  value="Видалити всі фото"/>
+  </form>
+  <hr><br>
+  {% endif %}
+  {% if original.slug %}
+  <form method="POST" action="{% url 'delete_item_features' original.slug  %}">
+    {% csrf_token %}
+    <input type="submit"  value="Видалити всі характеристики"/>
+  </form>
+  <hr><br>
+  {% endif %} -->
+
+
+{% endblock object-tools %}
+
+

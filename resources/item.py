@@ -7,9 +7,9 @@ from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 import json 
 
 from ..models import * 
-from box.core.utils import get_multilingual_fields
+from sw_utils.utils import get_multilingual_fields
 
-from box.core.sw_global_config.models import GlobalConfig, GlobalLabel, GlobalMarker
+from sw_global_config.models import GlobalConfig, GlobalLabel, GlobalMarker
 
 class ItemResource(ModelResource):
 
@@ -178,7 +178,7 @@ class ItemResource(ModelResource):
         4. Спочатку з ItemImage.csv грузяться фотки без лінок на товари. 
         Потім з Item.csv з поля images грузяться товари з ссилками на фотки 
         '''
-        # from box.apps.sw_shop.sw_catalog.utils.utils import get_image_path
+        # from sw_catalog.utils.utils import get_image_path
         # if row.get('images'):
         #     image_names = row['images'].split(',')
         #     print("image_names")

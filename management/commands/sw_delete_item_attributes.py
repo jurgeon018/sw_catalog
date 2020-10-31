@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from box.apps.sw_shop.sw_catalog.models import *
+from sw_catalog.models import *
 import random
 import datetime 
 import json 

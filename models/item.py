@@ -9,7 +9,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from . import ItemImage, Currency, ItemStock, ItemView
 from .. import settings as item_settings
 
-from box.core.models import AbstractPage
+from sw_utils.models import AbstractPage
 from PIL import Image
 
 
@@ -19,7 +19,7 @@ import os
 from django.core.files.storage import default_storage as storage
 from io import BytesIO
 from django.core.files import File
-from box.core.models import OverwriteStorage
+from sw_utils.models import OverwriteStorage
 
 from . import (
     ItemAttribute, ItemAttributeValue, Attribute, AttributeValue, ItemFeature,
@@ -357,7 +357,7 @@ class Item(AbstractPage, GoogleFieldsMixin, ItemPricesMixin):
         return 
 
     def is_in_cart(self, request):
-        from box.apps.sw_shop.sw_cart.utils import get_cart
+        from sw_cart.utils import get_cart
         return self.id in get_cart(request).items.all().values_list('item__id', flat=True)
 
     def get_stars_total(self):

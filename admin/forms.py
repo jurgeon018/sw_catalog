@@ -1,5 +1,5 @@
 # from django import forms 
-# from box.apps.sw_shop.sw_catalog.models import * 
+# from sw_catalog.models import * 
 # from ..models import * 
 
 

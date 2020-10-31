@@ -1,12 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models 
-from box.core.models import AbstractPage, BaseMixin
+from sw_utils.models import AbstractPage, BaseMixin
 # from adminsortable.admin import SortableAdmin, NonSortableParentAdmin, SortableStackedInline
 # from adminsortable.fields import SortableForeignKey
 from ..utils import generate_unique_slug, item_image_folder
 from django.contrib.auth import get_user_model
 from django.conf import settings 
-from box.core import settings as core_settings
+from sw_utils import settings as core_settings
 from colorfield.fields import ColorField
 from django.utils import timezone 
 from PIL import Image, ImageEnhance

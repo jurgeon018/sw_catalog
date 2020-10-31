@@ -6,10 +6,10 @@ from django.http import HttpResponse
 from django.shortcuts import redirect 
 from django.conf import settings 
 
-# from box.apps.sw_shop.sw_catalog.parser.main import *
-from box.core.sw_imp_exp.main import ExportMixin
+# from sw_catalog.parser.main import *
+from sw_imp_exp.main import ExportMixin
 
-from box.apps.sw_shop.sw_catalog.models import Item, ItemImage
+from sw_catalog.models import Item, ItemImage
 
 
 @staff_member_required
@@ -38,7 +38,7 @@ def delete_item_features(request, slug):
 
 @staff_member_required
 def import_item_photoes(request, slug=None):
-  from box.apps.sw_shop.sw_catalog.models import Item, ItemImage
+  from sw_catalog.models import Item, ItemImage
   from django.core.files.base import ContentFile
   from PIL import Image 
   from django.utils import timezone 

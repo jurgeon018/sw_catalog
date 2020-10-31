@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand 
-from box.apps.sw_shop.sw_catalog.models import Item, ItemCategory 
+from sw_catalog.models import Item, ItemCategory 
 from random import choice 
 
 

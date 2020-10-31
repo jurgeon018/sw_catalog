@@ -1,6 +1,6 @@
 import re
 from django.db.models import Q
-from box.apps.sw_shop.sw_catalog import settings as item_settings 
+from sw_catalog import settings as item_settings 
 
 def filter_search(items, query):
     search_query = query.get('q')

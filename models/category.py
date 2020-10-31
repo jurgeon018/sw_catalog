@@ -1,10 +1,10 @@
 # from ._imports import * 
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import reverse
-from box.core.models import AbstractPage, BaseMixin
+from sw_utils.models import AbstractPage, BaseMixin
 from django.db import models 
 
-from box.core.sw_currency.models import Currency
+from sw_currency.models import Currency
 from mptt.models import MPTTModel, TreeForeignKey
 from .. import settings as catalog_settings 
 from django.utils.text import slugify

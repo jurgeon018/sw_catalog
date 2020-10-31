@@ -1,7 +1,7 @@
 from django.db import models 
 from django.utils.text import slugify
 
-from box.core.helpers import get_admin_url 
+from sw_utils.helpers import get_admin_url 
 
 from transliterate import translit
 

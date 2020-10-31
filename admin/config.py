@@ -1,4 +1,4 @@
-from box.core.sw_solo.admin import SingletonModelAdmin
+from sw_solo.admin import SingletonModelAdmin
 
 
 

@@ -3,17 +3,17 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page
-from box.apps.sw_shop.sw_catalog import settings as item_settings
+from sw_catalog import settings as item_settings
 
 
-from box.apps.sw_shop.sw_catalog.models import Item, ItemCategory, ItemReview
-from box.apps.sw_shop.sw_catalog.api.serializers import ItemDetailSerializer, ItemReviewSerializer
-from box.apps.sw_shop.sw_cart.utils import get_cart
-from box.core.utils import get_line
-from box.apps.sw_shop.sw_catalog.api.search import filter_search
-from box.core.mail import box_send_mail
-from box.core.sw_global_config.models import GlobalConfig
-from box.apps.sw_shop.sw_catalog.models import CatalogueConfig
+from sw_catalog.models import Item, ItemCategory, ItemReview
+from sw_catalog.api.serializers import ItemDetailSerializer, ItemReviewSerializer
+from sw_cart.utils import get_cart
+from sw_utils.utils import get_line
+from sw_catalog.api.search import filter_search
+from mail import box_send_mail
+from sw_global_config.models import GlobalConfig
+from sw_catalog.models import CatalogueConfig
 
 
 from rest_framework import generics 
@@ -154,7 +154,7 @@ class ReviewViewSet(ModelViewSet):
 
 from django.http import Http404
 from rest_framework.decorators import api_view
-from box.apps.sw_shop.sw_cart.models import CartItemAttribute
+from sw_cart.models import CartItemAttribute
 
 
 @api_view(['GET','POST','DELETE'])

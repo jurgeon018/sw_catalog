@@ -2,11 +2,11 @@ from .attribute import *
 from .features import * 
 from .config import * 
 from .category import * 
-# from box.core.sw_currency.models import * 
+# from sw_currency.models import * 
 from .item_related import * 
 from .item import * 
 
-from box.core.models import AbstractRecipientEmail
+from sw_utils.models import AbstractRecipientEmail
 
 from django.utils.translation import ugettext_lazy as _
 

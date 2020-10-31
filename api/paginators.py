@@ -1,7 +1,7 @@
 from rest_framework.pagination import BasePagination, LimitOffsetPagination, PageNumberPagination, CursorPagination
 
 
-from box.apps.sw_shop.sw_cart.utils import get_cart
+from sw_cart.utils import get_cart
 
 
 def get_items_in_favours(request, items):

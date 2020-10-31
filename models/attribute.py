@@ -1,7 +1,7 @@
 from django.db import models 
 from django.utils.translation import gettext_lazy as _
-from box.core.sw_currency.models import Currency
-from box.core.helpers import get_admin_url
+from sw_currency.models import Currency
+from sw_utils.helpers import get_admin_url
 
 class AttributeCategory(models.Model):
     name   = models.CharField(

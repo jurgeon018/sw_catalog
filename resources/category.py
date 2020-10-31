@@ -7,7 +7,7 @@ from import_export.widgets import ForeignKeyWidget
 import json 
 
 from ..models import * 
-from box.core.utils import get_multilingual_fields
+from sw_utils.utils import get_multilingual_fields
 
 
 

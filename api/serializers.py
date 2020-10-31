@@ -1,6 +1,6 @@
 from django.conf import settings 
-from box.apps.sw_shop.sw_catalog.models import *
-from box.apps.sw_shop.sw_catalog import settings as item_settings
+from sw_catalog.models import *
+from sw_catalog import settings as item_settings
 from modeltranslation.manager import get_translatable_fields_for_model
 from rest_framework import serializers
 
@@ -110,7 +110,7 @@ class ItemDetailSerializer(serializers.ModelSerializer):
       'similars',
       # 'images',
     ]
-from box.core.sw_global_config.models import GlobalMarker
+from sw_global_config.models import GlobalMarker
 class GlobalMarkerSerializer(serializers.ModelSerializer):
   class Meta:
     model = GlobalMarker

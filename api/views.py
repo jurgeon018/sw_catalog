@@ -11,7 +11,7 @@ from sw_catalog.api.serializers import ItemDetailSerializer, ItemReviewSerialize
 from sw_cart.utils import get_cart
 from sw_utils.utils import get_line
 from sw_catalog.api.search import filter_search
-from mail import box_send_mail
+from sw_utils.mail import box_send_mail
 from sw_global_config.models import GlobalConfig
 from sw_catalog.models import CatalogueConfig
 

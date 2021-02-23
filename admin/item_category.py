@@ -97,7 +97,7 @@ class ItemCategoryAdmin(
     list_filter = (
         # ('title', TreeRelatedFieldListFilter),
     )
-    list_per_page = 200 
+    list_per_page = 300
 
     # changeform
     formfield_overrides = {

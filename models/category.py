@@ -10,7 +10,6 @@ from .. import settings as catalog_settings
 from django.utils.text import slugify
 from transliterate import translit
 
-# class ItemCategory(AbstractPage):
 class ItemCategory(AbstractPage, MPTTModel):
   parent     = models.ForeignKey(verbose_name=_("Батьківська категорія"), to='self', blank=True, null=True, on_delete=models.SET_NULL, related_name='subcategories')
   # parent     = TreeForeignKey(verbose_name=_("Батьківська категорія"), to='self', blank=True, null=True, on_delete=models.SET_NULL, related_name='subcategories')
@@ -19,7 +18,7 @@ class ItemCategory(AbstractPage, MPTTModel):
   class Meta: 
     verbose_name = _('категорія'); 
     verbose_name_plural = _('категорії'); 
-    unique_together = ('title', 'parent')
+    # unique_together = ('title', 'parent')
     ordering = ['order']
   
   def get_active_categories(self):

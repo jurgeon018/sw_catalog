@@ -231,6 +231,7 @@ def create_review(request):
     data = query.get('data')
     if data:
       query = json.loads(data)
+    print(query)
     item_id = query['item_id']
     rating  = query['product_rating']
     text    = query.get('text', '---')

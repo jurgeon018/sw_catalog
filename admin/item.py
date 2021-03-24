@@ -131,6 +131,7 @@ class ItemAdmin(
         'title',
         "brand",
         "manufacturer",
+        'article',
         "markers",   
         'currency',
         "labels",   
@@ -182,6 +183,7 @@ class ItemAdmin(
         'title',
         'price',
         'discount',
+        'article',
         'discount_type',
         'category',
         # 'currency',
@@ -196,6 +198,7 @@ class ItemAdmin(
     list_editable = [
         'price',
         # 'currency',
+        'article',
         'category',
         'discount',
         'discount_type',

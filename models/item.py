@@ -203,6 +203,7 @@ class Item(AbstractPage, GoogleFieldsMixin, ItemPricesMixin):
         upload_to=item_settings.ITEM_UPLOAD_TO,
         # storage=OverwriteStorage(),
     )
+    article = models.CharField(verbose_name=("Артикул"), blank=True, null=True, max_length=150)
 
     def __str__(self):
         return f"{self.title}"#, {self.slug}"

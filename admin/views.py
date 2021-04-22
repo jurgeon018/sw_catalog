@@ -6,8 +6,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect 
 from django.conf import settings 
 
-# from sw_catalog.parser.main import *
-from sw_imp_exp.main import ExportMixin
 
 from sw_catalog.models import Item, ItemImage
 
@@ -59,7 +57,7 @@ def import_item_photoes(request, slug=None):
 
 @staff_member_required
 def export_item_photoes(request, slug=None):
-  from box.imp_exp.main import ExportMixin
+  from sw_imp_exp.main import ExportMixin
   export   = ExportMixin()
   queryset = Item.objects.filter(slug=slug)
   response = export.admin_export_items_photoes(request, queryset)

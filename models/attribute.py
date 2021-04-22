@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from sw_currency.models import Currency
 from sw_utils.helpers import get_admin_url
 
+
 class AttributeCategory(models.Model):
     name   = models.CharField(
         verbose_name=_("Назва"), max_length=255, #unique=True

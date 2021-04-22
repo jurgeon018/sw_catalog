@@ -17,7 +17,8 @@ from django.utils.translation import gettext_lazy as _
 
 from sw_utils.utils import (
     AdminImageWidget, show_admin_link, move_to, BaseAdmin,
-    seo, base_main_info, ClonableModelAdmin
+    seo, base_main_info,
+    # ClonableModelAdmin,
 )
 from sw_catalog.models import * 
 from sw_cart.models import * 
